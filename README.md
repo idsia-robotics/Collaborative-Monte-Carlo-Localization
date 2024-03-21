@@ -35,6 +35,11 @@ To run the Docker
 ```bash
 sudo make run humble=1
 ```
+Then in the Docker, build the code
+```bash
+cd ncore && mkdir build && cd build && cmake .. -DBUILD_TESTING=1 && make -j12 
+cd ros2_ws && . /opt/ros/humble/setup.bash &&  colcon build && . install/setup.bash
+```
 
 ## Running the Algo
 Code is coming soon!
