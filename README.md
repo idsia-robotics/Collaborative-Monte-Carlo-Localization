@@ -19,7 +19,22 @@ on an onboard computer.
 </p>
 
 ## Installation
-We provide Docker installations for ROS 2 Humble.
+We provide Docker installations for ROS 2 Humble. Make sure you installed Docker Engine and NVidia container so you can run Dokcer with GPU support. 
+In the folder run 
+```bash
+sudo make humble=1
+```
+To build the Docker. Then download the external resources in the host machine
+```bash
+```
+To enable RVIZ visualization from the Docker run in the host machine
+```bash
+ xhost +local:docker
+```
+To run the Docker
+```bash
+sudo make run humble=1
+```
 
 ## Running the Algo
 Code is coming soon!
