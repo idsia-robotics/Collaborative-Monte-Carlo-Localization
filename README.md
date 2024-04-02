@@ -42,4 +42,4 @@ cd ros2_ws && . /opt/ros/humble/setup.bash &&  colcon build && . install/setup.b
 ```
 
 ## Running the Algo
-Code is coming soon!
+Code will be published this week (during the first week of April)! 
