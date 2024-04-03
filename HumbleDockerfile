@@ -56,12 +56,11 @@ COPY ros_ws ros_ws
 RUN cd /usr/include/ && sudo ln -sf eigen3/Eigen Eigen
 
 RUN cd /ros_ws/src/cmcl/cmcl_ros/ncore &&  cmake -S . -B build && cmake --build build
+  
+RUN cd /ros_ws && source /ros_entrypoint.sh && colcon build --packages-up-to robomaster_ros
 
 RUN cd /ros_ws && source /ros_entrypoint.sh && \
   colcon build  --packages-select cmcl_msgs cmcl_ros --cmake-clean-cache && rm -r build log
-    
-RUN cd /ros_ws && source /ros_entrypoint.sh && colcon build --packages-up-to optitrack_client
-RUN cd /ros_ws && source /ros_entrypoint.sh && colcon build --packages-up-to robomaster_ros
 
 
 WORKDIR /ros_ws

@@ -1,0 +1,185 @@
+<launch>
+
+
+<arg name="mapDir" default="/ros_ws/data/"/>
+<arg name="mapName" default="env1"/>
+<arg name="sim" default="true"/>
+<arg name="robotName1" default="RM0001"/>
+<arg name="robotName2" default="RM0002"/>
+<arg name="particleNum" default="2000"/>
+<arg name="distType" default="3"/>
+<arg name="csvPath" default="/ros_ws/dump/MCL/Env1/S1/"/>
+<arg name="run" default="0"/>
+<arg name="detection" default="false"/>
+<arg name="debug" default="false"/>
+<arg name="test" default="true"/>
+<arg name="uv" default="false"/>
+
+<!--
+ <node pkg="tf2_ros" exec="static_transform_publisher" name="maptoworld" args="0 0 0 0 0 0 1 map world 30"/>
+-->
+
+<node pkg="rviz2" exec="rviz2" name="rviz2" args="-d $(find-pkg-share cmcl_ros)/rviz/cmcl_real.rviz --ros-args --log-level FATAL" if="$(var debug)">
+</node> 
+
+
+<node pkg="cmcl_ros" exec="UVDetection2WorldNode" name="UVDetection2WorldNode1" if="$(var uv)">
+    <param name="robotID"            value="0"/>
+    <param name="visionTopic"            value="/$(var robotName1)/vision"/>
+    <param name="cameraInfoTopic"            value="/$(var robotName1)/camera/camera_info"/>
+    <param name="cameraColorTopic"            value="/$(var robotName1)/camera/image_color"/>
+    <param name="estimated3DDetectionTopic"            value="/$(var robotName1)/detectedRobot"/>
+    <param name="baseLinkTF" value="$(var robotName1)/base_link"/>
+    <param name="cameraTF" value="$(var robotName1)/camera_link"/>
+</node>
+
+
+<node pkg="cmcl_ros" exec="RelativePosedNode" name="RelativePosedNode1" unless="$(var uv)">
+  <param name="robotID"            value="0"/>
+  <param name="visionTopic"            value="/$(var robotName1)/vision"/>
+  <param name="robotName1"            value="/$(var robotName1)"/>
+  <param name="robotName2"            value="/$(var robotName2)"/>
+  <param name="detectedRobot"            value="/$(var robotName1)/detectedRobot"/>
+</node>
+
+<node pkg="cmcl_ros" exec="DetectionNoiseNode" name="DetectionNoiseNode1">
+  <param name="detectionTopic" value="/$(var robotName1)/detectedRobot"/>
+  <param name="noisyDetectionTopic" value="/$(var robotName1)/noisyDetectedRobot"/>
+  <param name="detectionNoise" value="0.05,0.05" value-sep=","/>
+</node>
+
+<node pkg="cmcl_ros" exec="OprtitrackPublisherNode" name="OprtitrackPublisherNode1">
+  <param name="robotName"            value="/$(var robotName1)"/>
+</node>
+
+
+<node pkg="cmcl_ros" exec="LidarScan2PointCloudNode" name="LidarScan2PointCloudNode1">
+  <param name="robotID"            value="0"/>
+  <param name="lidarTF"            value="$(var robotName1)/lidar/base_link"/>
+  <param name="lidarScanTopic"            value="/$(var robotName1)/lidar/scan"/>
+  <param name="baseLinkTF" value="$(var robotName1)/base_link"/>
+   <param name="pointCloudTopic" value="/$(var robotName1)/lidar/pointcloud"/>
+</node>
+
+
+<node pkg="cmcl_ros" exec="EvalNode" name="EvalNode1" if="$(var test)">
+  <param name="poseTopic" value="/$(var robotName1)/MCLPose"/>
+    <param name="predTopic" value="/$(var robotName1)/prediction"/>
+  <param name="gtTopic" value="/$(var robotName1)/GT"/>
+  <param name="csvPath" value="$(var csvPath)$(var robotName1)_$(var run).csv"/>
+</node>
+
+
+<node pkg="cmcl_ros" exec="MCLNode" name="MCLNode1">
+  <param name="robotID"            value="0"/>
+  <param name="mapDir"            value="$(var mapDir)"/>
+  <param name="mapName"            value="$(var mapName)"/>
+  <param name="scanTopic"            value="/$(var robotName1)/lidar/pointcloud"/>
+  <param name="odomTopic"            value="/$(var robotName1)/odom"/>
+  <param name="cmclConfigPath"            value="cmcl_realA.config"/>
+  <param name="mapTopic"            value="map"/>
+  <param name="triggerDist" value="0.05"/>
+  <param name="triggerAngle" value="0.05"/>
+  <param name="odomNoise" value="0.1,0.1,0.1" value-sep=","/>
+  <param name="poseTopic" value="/$(var robotName1)/MCLPose"/>
+  <param name="predTopic" value="/$(var robotName1)/prediction"/>
+  <param name="baseLinkTF" value="/$(var robotName1)/base_link"/>
+  <param name="likelihoodSigma" value="0.15"/>
+  <param name="maxRange" value="11.99"/>
+  <param name="minRange" value="0.15"/>
+  <param name="particleNum" value="$(var particleNum)"/>
+  <param name="tracking" value="false"/>
+  <param name="initGuess" value="-2.0,-3.0,0.0" value-sep=","/>
+  <param name="particleTopic" value="/$(var robotName1)/particles"/>
+  <param name="detection" value="$(var detection)"/>
+  <param name="distType" value="$(var distType)"/>
+  <param name="detectionTopic" value="/$(var robotName1)/noisyDetectedRobot"/>
+  <param name="distExSubTopic" value="/distExchange"/>
+  <param name="distExPubTopic" value="/distExchange"/>
+</node>
+
+<!--
+<node pkg="cmcl_ros" exec="UVDetection2WorldNode" name="UVDetection2WorldNode2" if="$(var uv)">
+    <param name="robotID"            value="1"/>
+    <param name="visionTopic"            value="/$(var robotName2)/vision"/>
+    <param name="cameraInfoTopic"            value="/$(var robotName2)/camera/camera_info"/>
+    <param name="cameraColorTopic"            value="/$(var robotName2)/camera/image_color"/>
+    <param name="estimated3DDetectionTopic"            value="/$(var robotName2)/detectedRobot"/>
+    <param name="baseLinkTF" value="$(var robotName2)/base_link"/>
+    <param name="cameraTF" value="$(var robotName2)/camera_link"/>
+</node>
+
+
+<node pkg="cmcl_ros" exec="RelativePosedNode" name="RelativePosedNode2" unless="$(var uv)">
+  <param name="robotID"            value="1"/>
+  <param name="visionTopic"            value="/$(var robotName2)/vision"/>
+  <param name="robotName1"            value="/$(var robotName2)"/>
+  <param name="robotName2"            value="/$(var robotName1)"/>
+  <param name="detectedRobot"            value="/$(var robotName2)/detectedRobot"/>
+</node>
+
+
+<node pkg="cmcl_ros" exec="DetectionNoiseNode" name="DetectionNoiseNode2">
+  <param name="detectionTopic" value="/$(var robotName2)/detectedRobot"/>
+  <param name="noisyDetectionTopic" value="/$(var robotName2)/noisyDetectedRobot"/>
+  <param name="detectionNoise" value="0.05,0.05" value-sep=","/>
+</node>
+-->
+
+<node pkg="cmcl_ros" exec="OprtitrackPublisherNode" name="OprtitrackPublisherNode2">
+  <param name="robotName"            value="/$(var robotName2)"/>
+</node>
+
+<node pkg="cmcl_ros" exec="EvalNode" name="EvalNode2" if="$(var test)">
+  <param name="poseTopic" value="/$(var robotName2)/MCLPose"/>
+  <param name="gtTopic" value="/$(var robotName2)/GT"/>
+    <param name="predTopic" value="/$(var robotName2)/prediction"/>
+  <param name="csvPath" value="$(var csvPath)$(var robotName2)_$(var run).csv"/>
+</node>
+
+
+<node pkg="cmcl_ros" exec="LidarScan2PointCloudNode" name="LidarScan2PointCloudNode2" >
+  <param name="lidarTF"            value="$(var robotName2)/lidar/base_link"/>
+  <param name="lidarScanTopic"            value="/$(var robotName2)/lidar/scan"/>
+  <param name="baseLinkTF" value="$(var robotName2)/base_link"/>
+  <param name="pointCloudTopic" value="/$(var robotName2)/lidar/pointcloud"/>
+</node>
+
+
+<node pkg="cmcl_ros" exec="MCLNode" name="MCLNode2">
+<param name="cmclConfigPath"            value="cmcl_realB.config"/>
+  <param name="robotID"            value="1"/>
+  <param name="mapDir"            value="$(var mapDir)"/>
+  <param name="mapName"            value="$(var mapName)"/>
+  <param name="scanTopic"            value="/$(var robotName2)/lidar/pointcloud"/>
+  <param name="odomTopic"            value="/$(var robotName2)/odom"/>
+  <param name="mapTopic"            value="map"/>
+  <param name="triggerDist" value="0.05"/>
+  <param name="triggerAngle" value="0.05"/>
+  <param name="odomNoise" value="0.05,0.05,0.05" value-sep=","/>
+  <param name="poseTopic" value="/$(var robotName2)/MCLPose"/>
+    <param name="predTopic" value="/$(var robotName2)/prediction"/>
+  <param name="baseLinkTF" value="/$(var robotName2)/base_link"/>
+  <param name="likelihoodSigma" value="0.3"/>
+  <param name="maxRange" value="11.99"/>
+  <param name="minRange" value="0.15"/>
+   <param name="particleNum" value="$(var particleNum)"/>
+  <param name="tracking" value="false"/>
+  <param name="initGuess" value="2.2768, -5.503, 0.0" value-sep=","/>
+  <param name="particleTopic" value="/$(var robotName2)/particles"/>
+  <param name="detection" value="$(var detection)"/>
+   <param name="distType" value="$(var distType)"/>
+  <param name="detectionTopic" value="/$(var robotName2)/detectedRobot"/>
+  <param name="distExSubTopic" value="/distExchange"/>
+  <param name="distExPubTopic" value="/distExchange2"/>
+</node>
+
+
+<node name="map_server" pkg="nav2_map_server" exec="map_server" output="screen" if="$(var debug)">
+ <param name="yaml_filename" value="$(var mapDir)/$(var mapName).yaml"/>
+</node>
+ <executable cmd="ros2 lifecycle set /map_server configure" output="screen" if="$(var debug)"/>
+ <executable cmd="ros2 lifecycle set /map_server activate" output="screen" if="$(var debug)"/>
+
+
+</launch>

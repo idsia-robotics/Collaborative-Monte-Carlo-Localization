@@ -96,7 +96,6 @@ set_target_properties(NCORE PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_
 
 add_executable(MCLNode src/MCLNode.cpp src/RosUtils.cpp)
 add_executable(LidarScan2PointCloudNode src/LidarScan2PointCloudNode.cpp src/RosUtils.cpp)
-add_executable(DistExNode src/DistExNode.cpp src/RosUtils.cpp)
 add_executable(EvalNode src/EvalNode.cpp src/RosUtils.cpp)
 add_executable(Depth4DetectionNode src/Depth4DetectionNode.cpp src/RosUtils.cpp)
 add_executable(UVDetection2WorldNode src/UVDetection2WorldNode.cpp src/RosUtils.cpp)
@@ -109,7 +108,6 @@ add_executable(MapLoaderNode src/MapLoaderNode.cpp src/RosUtils.cpp)
 
 target_link_libraries(MCLNode NCORE ${Boost_SYSTEM_LIBRARY} ${ARMADILLO_LIBRARIES} ${LAPACK_LIBRARIES} pybind11::embed)
 target_link_libraries(LidarScan2PointCloudNode NCORE ${Boost_SYSTEM_LIBRARY} pybind11::embed)
-target_link_libraries(DistExNode NCORE ${Boost_SYSTEM_LIBRARY} ${ARMADILLO_LIBRARIES} ${LAPACK_LIBRARIES} pybind11::embed)
 target_link_libraries(EvalNode NCORE ${Boost_SYSTEM_LIBRARY} pybind11::embed)
 target_link_libraries(Depth4DetectionNode NCORE ${Boost_SYSTEM_LIBRARY} pybind11::embed)
 target_link_libraries(UVDetection2WorldNode NCORE ${Boost_SYSTEM_LIBRARY} pybind11::embed)
@@ -123,7 +121,6 @@ ament_target_dependencies(MCLNode rclcpp std_msgs sensor_msgs nav_msgs cmcl_msgs
 
 ament_target_dependencies(LidarScan2PointCloudNode rclcpp std_msgs sensor_msgs nav_msgs cmcl_msgs geometry_msgs message_filters tf2 tf2_ros tf2_msgs pcl_ros pcl_conversions nlohmann_json OpenCV)
 
-ament_target_dependencies(DistExNode rclcpp std_msgs sensor_msgs nav_msgs cmcl_msgs geometry_msgs message_filters tf2 tf2_ros tf2_msgs pcl_ros pcl_conversions nlohmann_json OpenCV)
 
 ament_target_dependencies(EvalNode rclcpp std_msgs sensor_msgs nav_msgs cmcl_msgs geometry_msgs message_filters tf2 tf2_ros tf2_msgs pcl_ros pcl_conversions nlohmann_json OpenCV)
 
@@ -144,7 +141,6 @@ ament_target_dependencies(MapLoaderNode rclcpp std_msgs sensor_msgs nav2_map_ser
 install(TARGETS
  MCLNode
  LidarScan2PointCloudNode
- DistExNode
  EvalNode
  Depth4DetectionNode
  UVDetection2WorldNode
@@ -157,7 +153,7 @@ DESTINATION lib/${PROJECT_NAME}
 
 
 install(DIRECTORY
- python_cmcl
+ #python_cmcl
 DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -167,7 +163,7 @@ install(DIRECTORY
 )
 
 install(DIRECTORY
-  config
+  #config
   DESTINATION share/${PROJECT_NAME}
 )
 
