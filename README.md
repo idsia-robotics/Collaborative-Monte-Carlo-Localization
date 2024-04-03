@@ -59,8 +59,7 @@ cd /ros_ws && . /opt/ros/humble/setup.bash &&  colcon build && . install/setup.b
 ```
 
 ## Running the Algo
-Code will be published this week (during the first week of April)! 
-You can download the rosbag from [here](). place it in the `/ros_ws/rosbags` directory and you can use the demo.sh script to run it. 
+You can download the rosbag from [here](https://drive.google.com/drive/folders/1ho0j_o-idyufaRezadkoDuLhNNJ-RMgX?usp=sharing). place it in the `/ros_ws/rosbags` directory and you can use the Demo.sh script to run it. 
 Remember to enable RVIZ in your docker. 
 
 ### MCLNode
