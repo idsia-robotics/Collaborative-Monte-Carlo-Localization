@@ -584,9 +584,9 @@ class MCLNode : public rclcpp::Node
         std::vector<Particle> particles = o_mcl->Particles();  
         SetStatistics stats = SetStatistics::ComputeParticleSetStatistics(particles);  
         o_mtx->unlock();    
-        // o_pred = stats.Mean(); 
-        // o_cov = stats.Cov();
-        // publishPose(pcl_msg->header.stamp, -1);
+        o_pred = stats.Mean(); 
+        o_cov = stats.Cov();
+        publishPose(pcl_msg->header.stamp, -1);
         publishParticles(particles, pcl_msg->header.stamp);
       }
     }

@@ -11,8 +11,8 @@
 <arg name="csvPath" default="/ros_ws/dump/MCL/Env1/S1/"/>
 <arg name="run" default="0"/>
 <arg name="detection" default="false"/>
-<arg name="debug" default="false"/>
-<arg name="test" default="true"/>
+<arg name="debug" default="true"/>
+<arg name="test" default="false"/>
 <arg name="uv" default="false"/>
 
 <!--
