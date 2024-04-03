@@ -35,9 +35,8 @@ We provide Docker installations for ROS 2 Humble. Make sure you installed Docker
 Download the external resources in the host machine into the `/ros_ws/src` directory
 ```bash
 git clone git@github.com:jeguzzi/robomaster_ros.git
-git clone git@github.com:jeguzzi/optitrack_msgs.git
 ```
-These packages are necessarily for running the demo as the rosbag includes RoboMaster specific detection messages and ground truth poses from the OptiTrack system. However, they are not strictly necessary for any of the approaches, and the dependency can be removed with a bit of work on the ROS wrapper. In the root directory, run  
+The package is necessarily for running the demo as the rosbag includes RoboMaster specific detection messages. However, they are not strictly necessary for any of the approaches, and the dependency can be removed with a bit of work on the ROS wrapper. In the root directory, run  
 ```bash
 sudo make humble=1
 ```
