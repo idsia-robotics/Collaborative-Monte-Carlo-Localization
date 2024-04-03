@@ -1,0 +1,73 @@
+FROM ros:humble
+ENV DEBIAN_FRONTEND noninteractive
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES graphics,utility,compute
+
+RUN apt-get update && apt-get install -y \
+    locales \
+    python3-pip \
+    ros-humble-xacro \
+    ros-humble-launch-xml \
+    ros-humble-cv-bridge \
+    ros-humble-launch-testing-ament-cmake \
+    ros-humble-robot-state-publisher \
+    ros-humble-joint-state-publisher \
+    ros-humble-joint-state-publisher-gui \
+    ros-humble-joy \
+    ros-humble-joy-teleop \
+    ros-humble-tf-transformations \
+    ros-humble-pcl-conversions \
+    ros-humble-pcl-msgs \
+    ros-humble-pcl-ros \
+    libopus-dev \
+    nano \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN locale-gen en_US.UTF-8
+
+SHELL ["/bin/bash", "-c"]
+
+RUN python3 -m pip install -U numpy numpy-quaternion pyyaml
+RUN apt-get update && \
+    apt-get install -y nlohmann-json3-dev libgtest-dev libeigen3-dev libarmadillo-dev libensmallen-dev libcereal-dev libstb-dev g++ cmake && rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /tmp && cd /tmp && git clone https://github.com/mlpack/mlpack.git && cd /tmp/mlpack && cmake -S . -B build && cmake --build build --target install && rm -rf /tmp
+
+RUN mkdir /tmp
+RUN chmod 1777 /tmp
+RUN apt-get update && apt-get install -y \
+    ros-humble-rviz2 \
+    ros-humble-navigation2 \
+    ros-humble-nav2-bringup \
+    ros-humble-slam-toolbox \
+    ros-humble-rqt \
+    ros-humble-rqt-image-view \
+    ros-humble-rqt-tf-tree \
+    ros-humble-joy \
+    ros-humble-joy-teleop \
+    ros-humble-rosbag2-storage-mcap \
+    && rm -rf /var/lib/apt/lists/*
+
+
+
+RUN python3 -m pip install goodpoints pybind11 pandas
+
+COPY ros_ws ros_ws
+
+RUN cd /usr/include/ && sudo ln -sf eigen3/Eigen Eigen
+
+RUN cd /ros_ws/src/cmcl/cmcl_ros/ncore &&  cmake -S . -B build && cmake --build build
+
+RUN cd /ros_ws && source /ros_entrypoint.sh && \
+  colcon build  --packages-select cmcl_msgs cmcl_ros --cmake-clean-cache && rm -r build log
+    
+RUN cd /ros_ws && source /ros_entrypoint.sh && colcon build --packages-up-to optitrack_client
+RUN cd /ros_ws && source /ros_entrypoint.sh && colcon build --packages-up-to robomaster_ros
+
+
+WORKDIR /ros_ws
+
+
+#RUN chmod 1777 /tmp
+
+
+
