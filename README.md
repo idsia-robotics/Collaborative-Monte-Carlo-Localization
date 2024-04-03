@@ -1,4 +1,16 @@
 # Resource-Aware Collaborative Monte Carlo Localization with Distribution Compression
+This repository contains the implementation of the following [publication](https://arxiv.org/abs/2404.02010):
+```bibtex
+@misc{zimmerman2024arxiv,
+      title={{Resource-Aware Collaborative Monte Carlo Localization with Distribution Compression}}, 
+      author={Nicky Zimmerman and Alessandro Giusti and Jérôme Guzzi},
+      year={2024},
+      eprint={2404.02010},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO}
+}
+```
+Under review for IROS 2024.
 
 ## Abstract
  Global localization is essential in enabling robot autonomy, and collaborative localization is key for multi-robot systems. 
