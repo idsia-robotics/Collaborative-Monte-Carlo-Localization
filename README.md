@@ -10,7 +10,11 @@ This repository contains the implementation of the following [publication](https
       primaryClass={cs.RO}
 }
 ```
-Under review for IROS 2024.
+Under review for IROS 2024. Our live demo:
+
+[![DEMO](resources/frame.png)](https://www.youtube.com/watch?v=dgssNAHPvvM)
+
+
 
 ## Abstract
  Global localization is essential in enabling robot autonomy, and collaborative localization is key for multi-robot systems. 
