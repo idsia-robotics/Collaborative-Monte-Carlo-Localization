@@ -48,10 +48,14 @@ To run the Docker
 ```bash
 sudo make run humble=1
 ```
-Then in the Docker, build the code
+The core code is C++ with no ROS dependency. To build the ncore library in the docker, run
 ```bash
-cd ncore && mkdir build && cd build && cmake .. -DBUILD_TESTING=1 && make -j12 
-cd ros2_ws && . /opt/ros/humble/setup.bash &&  colcon build && . install/setup.bash
+cd src/cmcl/cmcl_ros/ncore && mkdir build && cd build && cmake .. -DBUILD_TESTING=1 && make -j12 
+./bin/UnitTests
+```
+Run the unit tests to verify the installation is successful. Then to build the ROS 2 wrapper
+```bash
+cd /ros_ws && . /opt/ros/humble/setup.bash &&  colcon build && . install/setup.bash
 ```
 
 ## Running the Algo
