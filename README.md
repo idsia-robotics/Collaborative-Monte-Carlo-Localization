@@ -36,9 +36,13 @@ In the folder run
 ```bash
 sudo make humble=1
 ```
-To build the Docker. Then download the external resources in the host machine
+To build the Docker. Then download the external resources in the host machine into the `/ros_ws/src` directory
 ```bash
+git clone git@github.com:jeguzzi/robomaster_ros.git
+git clone git@github.com:jeguzzi/optitrack_msgs.git
 ```
+These packages are necessarily for running the demo as the rosbag includes RoboMaster specific detection messages and ground truth poses from the OptiTrack system. However, they are not strictly necessary for any of the approaches, and the dependency can be removed with a bit of work on the ROS wrapper.
+
 To enable RVIZ visualization from the Docker run in the host machine
 ```bash
  xhost +local:docker
