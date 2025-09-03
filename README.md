@@ -1,16 +1,16 @@
 # Resource-Aware Collaborative Monte Carlo Localization with Distribution Compression
 This repository contains the implementation of the following [publication](https://arxiv.org/abs/2404.02010):
 ```bibtex
-@misc{zimmerman2024arxiv,
+@misc{zimmerman2024iros,
       title={{Resource-Aware Collaborative Monte Carlo Localization with Distribution Compression}}, 
       author={Nicky Zimmerman and Alessandro Giusti and Jérôme Guzzi},
+      booktitle={2024 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+      pages={3283--3290},
       year={2024},
-      eprint={2404.02010},
-      archivePrefix={arXiv},
-      primaryClass={cs.RO}
+      organization={IEEE}
 }
 ```
-Under review for IROS 2024. Our live demo:
+Accepted for IROS 2024. Our live demo:
 
 [![DEMO](resources/frame.png)](https://www.youtube.com/watch?v=dgssNAHPvvM)
 
